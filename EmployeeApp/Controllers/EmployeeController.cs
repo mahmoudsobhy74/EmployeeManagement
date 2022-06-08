@@ -7,11 +7,14 @@ namespace EmployeeApp.Controllers;
 public class EmployeeController : Controller
 {
     private readonly EmployeeService _service;
-    public EmployeeController(EmployeeService service)
+    private readonly DepartmentService _departmentService;
+    public EmployeeController(EmployeeService service,
+        DepartmentService departmentService)
     {
-        _service=service;
+        _service = service;
+        _departmentService = departmentService;
     }
-    public async Task <IActionResult> Index()
+    public async Task<IActionResult> Index()
     {
         var emps = await _service.GetAsync();
         return View(emps);
@@ -22,7 +25,7 @@ public class EmployeeController : Controller
         var emps = await _service.GetAsync(empid);
         return View(emps);
     }
-    
+
     public async Task<IActionResult> Create()
     {
         return View();
@@ -49,6 +52,14 @@ public class EmployeeController : Controller
     public async Task<IActionResult> Edit(Employee employee)
     {
         var emps = await _service.EditEmployeeAsync(employee);
+        ViewBag.ManagerId = await _service.GetAsync();
+        ViewBag.DepartmentId = await _departmentService.GetAsync();
+
+        return View(emps);
+    }
+    public async Task<IActionResult> Delete(int empid)
+    {
+        var emps = await _service.GetAsync(empid);
         return View(emps);
     }
     [HttpDelete]

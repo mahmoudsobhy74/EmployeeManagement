@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using EmployeeApp.ResponseModels;
 
 namespace EmployeeApp.Models;
 
@@ -20,4 +21,6 @@ public class ApplicationDbContext:DbContext
         builder.Entity<Employee>().HasOne(e => e.Department).WithMany(e => e.Employees).HasForeignKey(e => e.DepartmentId);
         builder.Entity<Employee>().HasOne(e => e.Manager).WithMany();
     }
+
+    public DbSet<EmployeeApp.ResponseModels.EmployeeResponse>? EmployeeResponse { get; set; }
 }
